@@ -6,5 +6,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="C:/Users/nick0/eclipse-workspace/SolutionChecker_E-VRP/lib/jdom-2.0.6.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import globalParameters.GlobalParametersReader;
 import model.Manager;
 import view.ManagerView;
 
@@ -89,10 +90,14 @@ public class Controller {
 					//Case when the user presses 1: Uses the set of instances of coindreau et al (2019)
 					
 					case 1:
+						// Reads the global parameters:
+						
+						GlobalParametersReader.initialize("./config/parametersGlobal.xml");
+						
 						view.printMessage("Do you want to see how it works with a default instance? (1:yes 0:no)");
 						int def = Integer.parseInt(sc.next());
 						if(def == 1) {
-							model.runCheck(1,0,10,2,"f",1);
+							model.runCheck(1,2,10,2,"f",0);
 						}else {
 							view.printMessage("Select A (0: random uniform, 1: clustered, 2: mixture of both");
 							int A = Integer.parseInt(sc.next());

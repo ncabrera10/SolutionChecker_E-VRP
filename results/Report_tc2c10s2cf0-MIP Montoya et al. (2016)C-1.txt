@@ -1,0 +1,16 @@
+Solver:MIP Montoya et al. (2016)
+Instance:tc2c10s2cf0
+----------------Constraints----------------
+Route charge constraints: true
+Route duration constraints: true
+Route start-end constraints: true
+All customers must be visited constraints: true
+CS's capacities constraints: false
+The solution is invalid
+----------------Routes----------------
+ObjectiveFunction: 26.773875500901543
+----------------Routes----------------
+RouteID - ObjectiveFunction
+0 - 9.491219333601752
+1 - 9.998421320225308
+2 - 7.284234847074484
