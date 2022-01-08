@@ -9,3 +9,7 @@ If you want to use this code:
 4. Run as a Java Application.
 
 All your results and reports will be store on the "results" folder.
+
+--------------------------------------------------------------------------------------------------------------
+
+Solutions for the second set of instances must end with a "-C1" or a "-C2". For example: tc2c10s2cf1-C2.xml
