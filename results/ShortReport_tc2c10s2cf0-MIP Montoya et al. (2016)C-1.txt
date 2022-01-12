@@ -1,7 +1,0 @@
-Parameter:Value
-Solver:MIP Montoya et al. (2016)
-Instance:tc2c10s2cf0
-CPU_Time:300000
-SolutionIsOptimal:true
-Feasibility:0
-ObjectiveFunction:21.773875500901543

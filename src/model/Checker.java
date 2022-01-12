@@ -94,9 +94,6 @@ public class Checker {
 		
 		// Is this from the first set or the second one ? TODO adapt with the new format
 			
-			//instancePath = "Montoya_2017";
-			
-			
 			String[] parts = solutionFileName.split("-");
 			if(parts.length > 1) {
 				if(parts[1].equals("C1.xml")) {
@@ -110,6 +107,7 @@ public class Checker {
 			}
 			
 		//Print the report:
+
 			this.printReport(solution,instance);
 		
 	}
@@ -138,6 +136,7 @@ public class Checker {
 			pw3.println("Instance:"+solution.getInstance_id());
 			pw3.println("CPU_Time:"+solution.getCputime());
 			pw3.println("SolutionIsOptimal:"+solution.getOptimal());
+			pw3.println("InstanceCapacity:"+instance.getCapacityID());
 			
 			//Check if the solution complies with the constraints:
 				

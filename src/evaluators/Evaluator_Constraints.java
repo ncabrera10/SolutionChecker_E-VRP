@@ -33,7 +33,7 @@ public class Evaluator_Constraints {
 	
 	public boolean evaluateCSCapacity(Solution solution, InstanceEVRPNLC instance, int precision,PrintWriter pw) {
 		Cons_CSCapacity constraint = new Cons_CSCapacity();
-		return(constraint.checkConstraint(solution, instance, true, precision,pw));
+		return(constraint.checkConstraintDeep(solution, instance, true, precision,pw));
 	}
 	
 	public boolean evaluateCustomersVisited(Solution solution, InstanceEVRPNLC instance, int precision,PrintWriter pw) {
