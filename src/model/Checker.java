@@ -86,7 +86,7 @@ public class Checker {
 		
 		//Reads the solution:
 		
-			Solution solution = this.readSolution(solutionFileName);
+			Solution solution = this.readSolutionF2(solutionFileName);
 		
 		//Read the instance:
 			
@@ -99,7 +99,7 @@ public class Checker {
 			
 			String[] parts = solutionFileName.split("-");
 			if(parts.length > 1) {
-				if(parts[1].charAt(1) == 1) {
+				if(parts[1].equals("C1.xml")) {
 					instance.setCapacityID(1);
 					instance.setCSCapacity(1);
 				}else {
@@ -110,7 +110,6 @@ public class Checker {
 			}
 			
 		//Print the report:
-			
 			this.printReport(solution,instance);
 		
 	}
@@ -132,6 +131,7 @@ public class Checker {
 			
 			//Headline:
 			
+			pw3.println("Parameter:Value");
 			pw.println("Solver:"+solution.getSolver());
 			pw.println("Instance:"+solution.getInstance_id());
 			pw3.println("Solver:"+solution.getSolver());
@@ -185,6 +185,7 @@ public class Checker {
 		}
 		catch(Exception e) {
 			System.out.println("Problem printing report for this solution");
+			e.printStackTrace();
 		}
 		
 		
@@ -750,7 +751,9 @@ public class Checker {
 				//Recover the main parameters of the solution:
 				
 					String instance_id = root.getAttributes().get(0).getValue();
+					
 					String solver = root.getAttributes().get(1).getValue();
+					solver = solver.replaceAll("/","");
 					String optimal = root.getAttributes().get(2).getValue();
 					
 				//Recovers the root element and creates an iterator for each children:
@@ -823,6 +826,120 @@ public class Checker {
 			return sol;
 	}
 	
+	/**
+	 * This method runs a solution
+	 * @return
+	 */
+	public Solution readSolutionF2(String solutionName) {
+		
+		// Build the current path:
+		
+			String pathName =  GlobalParameters.SOLUTIONS_FOLDER+"/"+solutionName;
+				
+		// Read the xml file:
+				
+			//Tries to parse the document:
+			
+				Document mXMLData = XMLParser.parse(pathName);
+				if (mXMLData == null) {
+					return null;
+				}
+			
+			// Data on the different nodes
+				
+				//Recovers the root element:
+				
+					Element root = mXMLData.getRootElement();
+				
+				//Recover the main parameters of the solution:
+				
+					String instance_id = root.getAttributes().get(0).getValue();
+					String solver = root.getAttributes().get(1).getValue();
+					solver = solver.replaceAll("/","");
+					String optimal = "";
+					if(root.getAttributes().size() > 2) {
+						optimal = root.getAttributes().get(2).getValue();
+					}
+					
+				//Recovers the root element and creates an iterator for each children:
+					
+					Iterator<Element> itRoutes = root.getChildren().iterator();
+					
+				//Creates a new solution object:
+				
+					Solution sol = new Solution();
+					sol.setInstance_id(instance_id);
+					sol.setSolver(solver);
+					sol.setOptimal(optimal);
+					
+				//Initializes the main attributes:
+					
+					Element eRoute, eNode;
+					int nodeID;
+					double waitingTime, chargingAmount, startingTime;
+					List<Element> nodeChildren;
+				
+				//Iterates thorough each route:
+					
+					while (itRoutes.hasNext()) {
+						RouteArray route = new RouteArray();
+						eRoute = itRoutes.next();
+						if(eRoute.getName().equals("route")) {
+							route.setRouteID(Integer.parseInt(eRoute.getAttributes().get(0).getValue()));
+							Iterator<Element>itNodesInRoute = null;//eRoute.getChild("sequence");
+							
+							if(eRoute.getChild("sequence") == null) {
+								itNodesInRoute = eRoute.getChildren().iterator();//eRoute.getChild("sequence");
+							}else {
+								itNodesInRoute = eRoute.getChild("sequence").getChildren().iterator();
+							}
+							while (itNodesInRoute.hasNext()) {
+								eNode = itNodesInRoute.next();
+								try {
+									nodeID = eNode.getAttribute("id").getIntValue();
+									nodeChildren = eNode.getChildren();
+									if (!nodeChildren.isEmpty()) {
+										waitingTime = Double.parseDouble(eNode.getChild("wait").getTextTrim());
+										chargingAmount = Double.parseDouble(eNode.getChild("charge").getTextTrim());
+										route.insert(nodeID, waitingTime, chargingAmount);
+									} else {
+										route.insert(nodeID, 0, 0);
+									}
+								} catch (DataConversionException | NumberFormatException e) {
+									e.printStackTrace();
+								}
+							}
+							if(eRoute.getChild("start_time") == null) {
+								startingTime = 0;
+							}else {
+								startingTime = Double.parseDouble(eRoute.getChild("start_time").getTextTrim());
+							}
+							route.setStartTime(startingTime);
+							sol.addRoute(route);
+						}else {
+							String cputime = eRoute.getChild("cputime").getValue();
+							Element specs = eRoute.getChild("machine");
+							String cpu = specs.getChild("cpu").getValue();
+							String cores = specs.getChild("cores").getValue();
+							String ram = specs.getChild("ram").getValue();
+							String language = specs.getChild("language").getValue();
+							String os = specs.getChild("os").getValue();
+						
+							sol.setCores(cores);
+							sol.setCpu(cpu);
+							sol.setRam(ram);
+							sol.setLanguage(language);
+							sol.setOs(os);
+							sol.setCputime(cputime);
+						}
+						
+					}
+		
+			
+		//Returns the solution:
+				
+			return sol;
+	}
 	
 	/**
 	 * @return the a

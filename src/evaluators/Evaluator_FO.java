@@ -40,30 +40,33 @@ public class Evaluator_FO {
 			double[] processingTimes = instance.getProcessingTimes();
 			int node1, node2;
 			Node[] nodes = instance.getNodes();
+			double serviceTimeT = 0;
 			
 		// For each route:
 			
 			for (Route route : solution.getRoutes()) {
-				// System.out.println(route);
+				//System.out.println(route);
 				energy = instance.getBatteryCapacity();
 				nodesInRoute = route.getRoute();
 				node1 = nodesInRoute.get(0);
 				duration = 0;
 				duration += processingTimes[node1];
+				serviceTimeT += processingTimes[node1];
 				if (nodes[node1].getType() == NodeType.CHARGING_STATION) {
 					chargingAmount = route.getChargingAmount(0);
 					chargingTime = instance.getChargingTime(nodes[node1], energy, chargingAmount, precision);
 					waitingTime = +route.getWaitingTime(0);
 					duration += (waitingTime + chargingTime);
 					energy += chargingAmount;
-					// System.out.println(chargingAmount + " - " + chargingTime + "
-					// (WAIT = " + waitingTime + ")");
+					// System.out.println(chargingAmount + " - " + chargingTime + "(WAIT = " + waitingTime + ")");
+					 
 				}
-				// System.out.println(node1.getID() + " -> " + duration);
+				//System.out.println(node1 + " -> " + duration);
 				for (int i = 0; i < nodesInRoute.size() - 1; i++) {
 					node1 = nodesInRoute.get(i);
 					node2 = nodesInRoute.get(i + 1);
 					duration += (timeMatrix[node1][node2] + processingTimes[node2]);
+					serviceTimeT += processingTimes[node2];
 					energy -= energyMatrix[node1][node2];
 					if (nodes[node2].getType() == NodeType.CHARGING_STATION) {
 						chargingAmount = route.getChargingAmount(i + 1);
@@ -71,10 +74,10 @@ public class Evaluator_FO {
 						waitingTime = route.getWaitingTime(i + 1);
 						duration += (waitingTime + chargingTime);
 						energy += chargingAmount;
-						// System.out.println(chargingAmount + " - " + chargingTime
+						 //System.out.println(chargingAmount + " - " + chargingTime+ "(WAIT = " + waitingTime + ")");
 						// + " (WAIT = " + waitingTime + ")");
 					}
-					// System.out.println(node2.getID() + " -> " + duration);
+					 //System.out.println(node2 + " -> " + duration+"("+timeMatrix[node1][node2]+")");
 				}
 				objectiveValue += duration;
 			}
@@ -85,7 +88,7 @@ public class Evaluator_FO {
 		
 		// Return the objective function value:
 			
-			return objectiveValue;
+			return objectiveValue-serviceTimeT;
 	}
 	
 	
@@ -115,7 +118,8 @@ public class Evaluator_FO {
 			double[] processingTimes = instance.getProcessingTimes();
 			int node1, node2;
 			Node[] nodes = instance.getNodes();
-
+			double serviceTimeT = 0;
+			
 		//Recovers key aspects: nodes in route, battery capacity:
 			
 			energy = instance.getBatteryCapacity();
@@ -123,6 +127,7 @@ public class Evaluator_FO {
 			node1 = nodesInRoute.get(0);
 			duration = 0;
 			duration += processingTimes[node1];
+			serviceTimeT += processingTimes[node1];
 			
 		// If the node is a charging station:
 			
@@ -148,6 +153,7 @@ public class Evaluator_FO {
 				node2 = nodesInRoute.get(i + 1);
 				duration += (timeMatrix[node1][node2] + processingTimes[node2]);
 				energy -= energyMatrix[node1][node2];
+				serviceTimeT += processingTimes[node2];
 				if (nodes[node2].getType() == NodeType.CHARGING_STATION) {
 					chargingAmount = route.getChargingAmount(i + 1);
 					chargingTime = instance.getChargingTime(nodes[node2], energy, chargingAmount, precision);
@@ -171,7 +177,7 @@ public class Evaluator_FO {
 			
 		//Returns the objective function:
 			
-			return objectiveValue;
+			return objectiveValue-serviceTimeT;
 	}
 
 	/**
@@ -200,8 +206,10 @@ public class Evaluator_FO {
 			int node1, node2;
 			nodesInRoute = route.getRoute();
 			node1 = nodesInRoute.get(0);
+			double serviceTimeT = 0;
 			duration = 0;
 			duration += processingTimes[node1];
+			serviceTimeT += processingTimes[node1];
 			
 		// Calculates the duration:
 			
@@ -209,6 +217,7 @@ public class Evaluator_FO {
 				node1 = nodesInRoute.get(i);
 				node2 = nodesInRoute.get(i + 1);
 				duration += (timeMatrix[node1][node2] + processingTimes[node2]);
+				serviceTimeT += processingTimes[node1];
 			}
 			
 		//Objective function:
@@ -218,6 +227,6 @@ public class Evaluator_FO {
 			
 		//Returns the objective function:
 			
-			return objectiveValue;
+			return objectiveValue-serviceTimeT;
 	}
 }

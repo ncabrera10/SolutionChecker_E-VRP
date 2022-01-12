@@ -8,9 +8,9 @@ All customers must be visited constraints: true
 CS's capacities constraints: true
 The solution is valid
 ----------------Routes----------------
-ObjectiveFunction: 26.773875500901543
+ObjectiveFunction: 21.773875500901543
 ----------------Routes----------------
 RouteID - ObjectiveFunction
-0 - 9.491219333601752
-1 - 9.998421320225308
-2 - 7.284234847074484
+0 - 7.991219333601752
+1 - 6.998421320225308
+2 - 6.784234847074484
