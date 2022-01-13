@@ -16,11 +16,11 @@ public class Manager {
 	 * Runs the checker
 	 */
 	
-	public Checker runCheck(int se,int A,int B,int C,String D, int E) {
+	public Checker runCheck(int se,int A,int B,int C,String D, int E,int F) {
 		
 		//Creates a checker:
 		
-		Checker ch = new Checker(se,A,B,C,D,E);
+		Checker ch = new Checker(se,A,B,C,D,E,F);
 		
 		//Returns the checker:
 		

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<solution instance="tc2c10s2cf0" solver="MIP Montoya et al. (2016)" optimal="false">
+	<route id="0">
+		<depot id="0"/>
+		<station id="11">
+			<wait>0</wait>
+			<charge>10246.06854283780</charge>	
+		</station>
+		<customer id="6"/>
+		<customer id="5"/>
+		<customer id="7"/>
+		<station id="12">
+			<wait>0</wait>
+			<charge>7408.0517850511815</charge>	
+		</station>
+		<depot id="0"/>
+	</route>
+	<route id="1">
+		<depot id="0"/>
+		<customer id="1"/>
+		<customer id="2"/>
+		<customer id="3"/>
+		<customer id="4"/>
+		<station id="12">
+			<wait>0</wait>
+			<charge>12979.5301381510</charge>	
+		</station>
+		<customer id="10"/>
+		<customer id="9"/>
+		<depot id="0"/>
+	</route>
+	<route id="2">
+		<depot id="0"/>
+		<station id="12">
+			<wait>0</wait>
+			<charge>4839.584878856890</charge>	
+		</station>
+		<customer id="8"/>
+		<station id="12">
+			<wait>0</wait>
+			<charge>7408.0517850511815</charge>	
+		</station>
+		<depot id="0"/>
+	</route>
+	<runtime>
+		<machine>
+			<cpu>3.2</cpu>
+			<cores>8</cores>
+			<ram>32</ram>
+			<language>Java</language>
+			<os>macOS Monterey</os>
+		</machine>
+		<cputime>300000</cputime>
+	</runtime>
+</solution>

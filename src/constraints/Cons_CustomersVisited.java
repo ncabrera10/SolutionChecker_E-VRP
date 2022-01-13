@@ -10,7 +10,6 @@ import dataStructures.Solution;
 
 /**
  * This class allows to check that all customers are visited just one time.
- * @author nick0
  *
  */
 public class Cons_CustomersVisited {

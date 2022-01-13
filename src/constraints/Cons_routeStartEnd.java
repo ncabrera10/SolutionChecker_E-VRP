@@ -8,8 +8,7 @@ import dataStructures.Solution;
 
 /**
  * This class allows to check that every route starts and ends at the depot.
- * @author nick0
- *
+ * 
  */
 public class Cons_routeStartEnd {
 	

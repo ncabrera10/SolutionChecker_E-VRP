@@ -10,8 +10,7 @@ import dataStructures.Route;
 import dataStructures.Solution;
 
 /**
- * This class alows to check the total route duration.
- * @author nick0
+ * This class allows to check the total route duration.
  *
  */
 public class Cons_routeDuration {
@@ -46,8 +45,7 @@ public class Cons_routeDuration {
 	 * @return
 	 */
 	public boolean checkConstraint(Route route, InstanceEVRPNLC instance, boolean output, int precision,PrintWriter pw) {
-		// System.out.println("----------Time constraints--------");
-		
+
 		//Initializes some parameters:
 		
 			double duration, energy, chargingTime, chargingAmount;
@@ -67,8 +65,6 @@ public class Cons_routeDuration {
 			if (nodes[node1].getType() == NodeType.CHARGING_STATION) {
 				chargingAmount = route.getChargingAmount(0);
 				chargingTime = instance.getChargingTime(nodes[node1], energy, chargingAmount, precision);
-				// System.out.println("Evaluation (chargingTime) = " +
-				// chargingTime);
 				duration += chargingTime;
 				energy += chargingAmount;
 				if (duration - Math.pow(10, -precision) > instance.getTmax()) {
@@ -90,8 +86,6 @@ public class Cons_routeDuration {
 				if (nodes[node2].getType() == NodeType.CHARGING_STATION) {
 					chargingAmount = route.getChargingAmount(i + 1);
 					chargingTime = instance.getChargingTime(nodes[node2], energy, chargingAmount, precision);
-					// System.out.println("Evaluation (chargingTime) = " +
-					// chargingTime);
 					duration += chargingTime;
 					energy += chargingAmount;
 				}
@@ -118,7 +112,6 @@ public class Cons_routeDuration {
 	 * @return
 	 */
 	public boolean checkConstraintDeep(Solution solution, InstanceEVRPNLC instance, boolean output, int precision,PrintWriter pw) {
-		// System.out.println("----------Time constraints--------");
 		boolean feasible = true;
 		for (Route route : solution.getRoutes()) {
 			feasible = feasible & checkConstraintDeep(route, instance, output, precision,pw);
@@ -135,8 +128,7 @@ public class Cons_routeDuration {
 	 * @return
 	 */
 	public boolean checkConstraintDeep(Route route, InstanceEVRPNLC instance, boolean output, int precision,PrintWriter pw) {
-		// System.out.println("----------Time constraints--------");
-		
+
 		//Initializes the main parameters:
 		
 			boolean feasible = true;
@@ -158,8 +150,6 @@ public class Cons_routeDuration {
 			if (nodes[node1].getType() == NodeType.CHARGING_STATION) {
 				chargingAmount = route.getChargingAmount(0);
 				chargingTime = instance.getChargingTime(nodes[node1], energy, chargingAmount, precision);
-				// System.out.println("Evaluation (chargingTime) = " +
-				// chargingTime);
 				duration += chargingTime;
 				energy += chargingAmount;
 			}
@@ -174,8 +164,6 @@ public class Cons_routeDuration {
 				if (nodes[node2].getType() == NodeType.CHARGING_STATION) {
 					chargingAmount = route.getChargingAmount(i + 1);
 					chargingTime = instance.getChargingTime(nodes[node2], energy, chargingAmount, precision);
-					// System.out.println("Evaluation (chargingTime) = " +
-					// chargingTime);
 					duration += chargingTime;
 					energy += chargingAmount;
 				}
@@ -190,11 +178,7 @@ public class Cons_routeDuration {
 				}
 				feasible = false;
 			}
-		// EvaluationDelegatesI evaluator =
-		// EvaluationDelegatesFactory.newEvaluationDelegates();
-		// System.out.println("duration = " + duration + " vs " +
-		// evaluator.evaluate(route, instance));
-			
+
 		//Returns if it is feasible:
 			
 		return feasible;

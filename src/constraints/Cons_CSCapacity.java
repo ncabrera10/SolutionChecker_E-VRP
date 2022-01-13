@@ -18,7 +18,6 @@ import dataStructures.Node;
 
 /**
  * This class allows for checking the capacity constraints for each charging station.
- * @author nick0
  *
  */
 public class Cons_CSCapacity {
@@ -44,19 +43,15 @@ public class Cons_CSCapacity {
 				precision);
 		for (ChargingOperationTask op : list) {
 			map.get(op.getNode()).add(op);
-			// System.out.println(op);
 		}
 
 		int nbEVs, k, nbOperations, capacity, l;
 		LinkedList<Integer> opInExecution = new LinkedList<>();
 		for (Entry<Node, List<ChargingOperationTask>> entry : map.entrySet()) {
 			List<ChargingOperationTask> listOperations = entry.getValue();
-			// Collections.sort(listOperations, (a, b) -> a.getStart() <
-			// b.getStart() ? -1 : 0);
 			Collections.sort(listOperations, ChargingOperationTask.ChargingOperationComparator);
 			nbOperations = listOperations.size();
 			capacity = instance.getCapacityCS(entry.getKey());
-			//System.out.println(capacity);
 			opInExecution.clear();
 			opInExecution.add(0);
 			k = 1;
@@ -82,13 +77,6 @@ public class Cons_CSCapacity {
 						for (Integer idx : opInExecution) {
 							pw.println(listOperations.get(idx));
 						}
-						// List<ChargingOperation> list2 =
-						// ChargingOperation.getAllChargingOperations(instance,
-						// solution,
-						// instance.getNbDecimals());
-						// for (ChargingOperation op : list2) {
-						// System.out.println(op);
-						// }
 					}
 					return false;
 				}
@@ -158,7 +146,6 @@ public class Cons_CSCapacity {
 					if (output) {
 						pw.println("Too many EVs charging at the same time at CS " + entry.getKey().getID()
 								+ " t " + nbEVs + " > " + capacity);
-						System.out.println("Operations at CS " + entry.getKey().getID());
 						for (Integer idx : opInExecution) {
 							pw.println(listOperations.get(idx));
 						}

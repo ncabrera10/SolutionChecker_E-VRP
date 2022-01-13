@@ -13,3 +13,9 @@ All your results and reports will be store on the "results" folder.
 --------------------------------------------------------------------------------------------------------------
 
 Solutions for the second set of instances must end with a "-C1" or a "-C2". For example: tc2c10s2cf1-C2.xml
+
+---------------------------------------------------------------------------------------------------------------
+
+The solutions folder includes 3 solutions. One solution for the tc2c10s2cf0 instance without CSs capacity and
+two solutions for the tc2c10s2cf0 instance with capacity 1 and 2.
+

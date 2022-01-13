@@ -45,7 +45,7 @@ public class Evaluator_FO {
 		// For each route:
 			
 			for (Route route : solution.getRoutes()) {
-				//System.out.println(route);
+
 				energy = instance.getBatteryCapacity();
 				nodesInRoute = route.getRoute();
 				node1 = nodesInRoute.get(0);
@@ -58,10 +58,9 @@ public class Evaluator_FO {
 					waitingTime = +route.getWaitingTime(0);
 					duration += (waitingTime + chargingTime);
 					energy += chargingAmount;
-					// System.out.println(chargingAmount + " - " + chargingTime + "(WAIT = " + waitingTime + ")");
 					 
 				}
-				//System.out.println(node1 + " -> " + duration);
+
 				for (int i = 0; i < nodesInRoute.size() - 1; i++) {
 					node1 = nodesInRoute.get(i);
 					node2 = nodesInRoute.get(i + 1);
@@ -74,10 +73,7 @@ public class Evaluator_FO {
 						waitingTime = route.getWaitingTime(i + 1);
 						duration += (waitingTime + chargingTime);
 						energy += chargingAmount;
-						 //System.out.println(chargingAmount + " - " + chargingTime+ "(WAIT = " + waitingTime + ")");
-						// + " (WAIT = " + waitingTime + ")");
 					}
-					 //System.out.println(node2 + " -> " + duration+"("+timeMatrix[node1][node2]+")");
 				}
 				objectiveValue += duration;
 			}
@@ -134,17 +130,10 @@ public class Evaluator_FO {
 			if (nodes[node1].getType() == NodeType.CHARGING_STATION) {
 				chargingAmount = route.getChargingAmount(0);
 				chargingTime = instance.getChargingTime(nodes[node1], energy, chargingAmount, precision);
-				// System.out.println("Evaluation (chargingTime) = " +
-				// chargingTime);
-				// System.out.println(energy + " -> " + (energy + chargingAmount));
 				waitingTime = +route.getWaitingTime(0);
 				duration += (waitingTime + chargingTime);
 				energy += chargingAmount;
-				// System.out.println(chargingAmount + " - " + chargingTime + "
-				// (WAIT = " + waitingTime + ")");
 			}
-			
-		// System.out.println(node1.getID() + " -> " + duration);
 			
 		// Iterates through the complete route:
 			
@@ -157,17 +146,10 @@ public class Evaluator_FO {
 				if (nodes[node2].getType() == NodeType.CHARGING_STATION) {
 					chargingAmount = route.getChargingAmount(i + 1);
 					chargingTime = instance.getChargingTime(nodes[node2], energy, chargingAmount, precision);
-					// System.out.println("Evaluation (chargingTime) = " +
-					// chargingTime);
-					// System.out.println(energy + " -> " + (energy +
-					// chargingAmount));
 					waitingTime = route.getWaitingTime(i + 1);
 					duration += (waitingTime + chargingTime);
 					energy += chargingAmount;
-					// System.out.println(chargingAmount + " - " + chargingTime
-					// + " (WAIT = " + waitingTime + ")");
 				}
-				// System.out.println(node2.getID() + " -> " + duration);
 			}
 			
 		//Computes the final objective function:

@@ -53,8 +53,23 @@ public class Checker {
 	 */
 	private int E;
 	
+	/**
+	 * Capacity for each CS
+	 */
+	private int F;
+	
+	/**
+	 * 
+	 * @param se
+	 * @param a
+	 * @param b
+	 * @param c
+	 * @param d
+	 * @param e
+	 * @param f
+	 */
 
-	public Checker(int se,int a,int b,int c,String d, int e) {
+	public Checker(int se,int a,int b,int c,String d, int e,int f) {
 		
 		//Initialize main parameters of the instance:
 		
@@ -63,12 +78,20 @@ public class Checker {
 			C = c;
 			D = d;
 			E = e;
-		
+			F = f;
+			
 		//Read the instance:
 		
 			InstanceEVRPNLC instance = this.readInstance_C();
 			if(se == 2) {
-				instance.setCSCapacity(1); //or 2;
+				if(f == 1) {
+					instance.setCSCapacity(1);
+					instance.setCapacityID(1);
+				}else {
+					instance.setCSCapacity(2);
+					instance.setCapacityID(2);
+				}
+				
 			}
 			
 		//Reads the solution:
@@ -86,13 +109,13 @@ public class Checker {
 		
 		//Reads the solution:
 		
-			Solution solution = this.readSolutionF2(solutionFileName);
+			Solution solution = this.readSolution(solutionFileName);
 		
 		//Read the instance:
 			
 			InstanceEVRPNLC instance = this.readInstance(solution.getInstance_id());
 		
-		// Is this from the first set or the second one ? TODO adapt with the new format
+		// Is this from the first set or the second one ?
 			
 			String[] parts = solutionFileName.split("-");
 			if(parts.length > 1) {
@@ -116,9 +139,18 @@ public class Checker {
 		
 		//Creates a path to print the report:
 		
-			String ruta = GlobalParameters.RESULT_FOLDER+"Report_"+solution.getInstance_id()+"-"+solution.getSolver()+"C-"+instance.getCapacityID()+".txt";
-			String ruta_details = GlobalParameters.RESULT_FOLDER+"DetailsReport_"+solution.getInstance_id()+"-"+solution.getSolver()+"C-"+instance.getCapacityID()+".txt";
-			String ruta_shortReport = GlobalParameters.RESULT_FOLDER+"ShortReport_"+solution.getInstance_id()+"-"+solution.getSolver()+"C-"+instance.getCapacityID()+".txt";
+			String ruta = "";
+			String ruta_details = "";
+			String ruta_shortReport = "";
+			if(instance.getCapacityID() == 0) {
+				ruta = GlobalParameters.RESULT_FOLDER+"Report_"+solution.getInstance_id()+"-"+solution.getSolver()+".txt";
+				ruta_details = GlobalParameters.RESULT_FOLDER+"DetailsReport_"+solution.getInstance_id()+"-"+solution.getSolver()+".txt";
+				ruta_shortReport = GlobalParameters.RESULT_FOLDER+"ShortReport_"+solution.getInstance_id()+"-"+solution.getSolver()+".txt";
+			}else {
+				ruta = GlobalParameters.RESULT_FOLDER+"Report_"+solution.getInstance_id()+"-"+solution.getSolver()+"-C"+instance.getCapacityID()+".txt";
+				ruta_details = GlobalParameters.RESULT_FOLDER+"DetailsReport_"+solution.getInstance_id()+"-"+solution.getSolver()+"-C"+instance.getCapacityID()+".txt";
+				ruta_shortReport = GlobalParameters.RESULT_FOLDER+"ShortReport_"+solution.getInstance_id()+"-"+solution.getSolver()+"-C"+instance.getCapacityID()+".txt";
+			}
 			
 		//Main logic:
 			
@@ -135,7 +167,7 @@ public class Checker {
 			pw3.println("Solver:"+solution.getSolver());
 			pw3.println("Instance:"+solution.getInstance_id());
 			pw3.println("CPU_Time:"+solution.getCputime());
-			pw3.println("SolutionIsOptimal:"+solution.getOptimal());
+			pw3.println("SolutionIsSupposedToBeOptimal:"+solution.getOptimal());
 			pw3.println("InstanceCapacity:"+instance.getCapacityID());
 			
 			//Check if the solution complies with the constraints:
@@ -388,7 +420,7 @@ public class Checker {
 							processingTimes[nodeID] = processingTime;
 						} catch (DataConversionException e1) {
 							e1.printStackTrace();
-							throw new IllegalStateException("The node ID is unkwnon " + request.toString());
+							throw new IllegalStateException("The node ID is unknown " + request.toString());
 						}
 					}
 			
@@ -413,7 +445,12 @@ public class Checker {
 		
 		// Build the current path:
 		
-			String pathName =  GlobalParameters.SOLUTIONS_FOLDER+"/"+"tc"+A+"c"+B+"s"+C+"c"+D+E+".xml";
+			String pathName = "";
+			if(F == -1) {
+				pathName = GlobalParameters.SOLUTIONS_FOLDER+"/"+"tc"+A+"c"+B+"s"+C+"c"+D+E+".xml";
+			}else {
+				pathName = GlobalParameters.SOLUTIONS_FOLDER+"/"+"tc"+A+"c"+B+"s"+C+"c"+D+E+"-C"+F+".xml";
+			}
 
 		// Read the xml file:
 				
@@ -722,114 +759,13 @@ public class Checker {
 					
 	}
 	
-	/**
-	 * This method runs a solution
-	 * @return
-	 */
-	public Solution readSolution(String solutionName) {
-		
-		// Build the current path:
-		
-			String pathName =  GlobalParameters.SOLUTIONS_FOLDER+"/"+solutionName;
-				
-		// Read the xml file:
-				
-			//Tries to parse the document:
-			
-				Document mXMLData = XMLParser.parse(pathName);
-				if (mXMLData == null) {
-					return null;
-				}
-			
-			// Data on the different nodes
-				
-				//Recovers the root element:
-				
-					Element root = mXMLData.getRootElement();
-				
-				//Recover the main parameters of the solution:
-				
-					String instance_id = root.getAttributes().get(0).getValue();
-					
-					String solver = root.getAttributes().get(1).getValue();
-					solver = solver.replaceAll("/","");
-					String optimal = root.getAttributes().get(2).getValue();
-					
-				//Recovers the root element and creates an iterator for each children:
-					
-					Iterator<Element> itRoutes = root.getChildren().iterator();
-					
-				//Creates a new solution object:
-				
-					Solution sol = new Solution();
-					sol.setInstance_id(instance_id);
-					sol.setSolver(solver);
-					sol.setOptimal(optimal);
-					
-				//Initializes the main attributes:
-					
-					Element eRoute, eNode;
-					int nodeID;
-					double waitingTime, chargingAmount, startingTime;
-					List<Element> nodeChildren;
-				
-				//Iterates thorough each route:
-					
-					while (itRoutes.hasNext()) {
-						RouteArray route = new RouteArray();
-						eRoute = itRoutes.next();
-						if(eRoute.getName().equals("route")) {
-							route.setRouteID(Integer.parseInt(eRoute.getAttributes().get(0).getValue()));
-							Iterator<Element>itNodesInRoute = eRoute.getChildren().iterator();//eRoute.getChild("sequence");
-							while (itNodesInRoute.hasNext()) {
-								eNode = itNodesInRoute.next();
-								try {
-									nodeID = eNode.getAttribute("id").getIntValue();
-									nodeChildren = eNode.getChildren();
-									if (!nodeChildren.isEmpty()) {
-										waitingTime = Double.parseDouble(eNode.getChild("wait").getTextTrim());
-										chargingAmount = Double.parseDouble(eNode.getChild("charge").getTextTrim());
-										route.insert(nodeID, waitingTime, chargingAmount);
-									} else {
-										route.insert(nodeID, 0, 0);
-									}
-								} catch (DataConversionException | NumberFormatException e) {
-									e.printStackTrace();
-								}
-							}
-							startingTime = 0;//Double.parseDouble(eRoute.getChild("start_time").getTextTrim());
-							route.setStartTime(startingTime);
-							sol.addRoute(route);
-						}else {
-							String cputime = eRoute.getChild("cputime").getValue();
-							Element specs = eRoute.getChild("machine");
-							String cpu = specs.getChild("cpu").getValue();
-							String cores = specs.getChild("cores").getValue();
-							String ram = specs.getChild("ram").getValue();
-							String language = specs.getChild("language").getValue();
-							String os = specs.getChild("os").getValue();
-						
-							sol.setCores(cores);
-							sol.setCpu(cpu);
-							sol.setRam(ram);
-							sol.setLanguage(language);
-							sol.setOs(os);
-							sol.setCputime(cputime);
-						}
-						
-					}
-		
-			
-		//Returns the solution:
-				
-			return sol;
-	}
+	
 	
 	/**
 	 * This method runs a solution
 	 * @return
 	 */
-	public Solution readSolutionF2(String solutionName) {
+	public Solution readSolution(String solutionName) {
 		
 		// Build the current path:
 		
@@ -1009,6 +945,22 @@ public class Checker {
 	public void setE(int e) {
 		E = e;
 	}
+
+	/**
+	 * @return the f
+	 */
+	public int getF() {
+		return F;
+	}
+
+	/**
+	 * @param f the f to set
+	 */
+	public void setF(int f) {
+		F = f;
+	}
+	
+	
 	
 	
 }

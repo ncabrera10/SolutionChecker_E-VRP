@@ -11,7 +11,6 @@ import dataStructures.Solution;
 
 /**
  * This class allows to check that during all the route the charge of the battery is > 0.
- * @author nick0
  *
  */
 public class Cons_routeCharge {
@@ -80,7 +79,6 @@ public class Cons_routeCharge {
 				energy -= energyMatrix[node1][node2];
 				energyD = energyD
 						.subtract(new BigDecimal(energyMatrix[node1][node2], new MathContext(instance.getNbDecimals())));
-				// if (Maths.floor(energy, precision) < 0) {
 				if (energyD.doubleValue() + Math.pow(10, -precision) < 0) {
 	
 					if (output) {
@@ -168,7 +166,6 @@ public class Cons_routeCharge {
 				node2 = nodesInRoute.get(i + 1);
 				energyD = energyD
 						.subtract(new BigDecimal(energyMatrix[node1][node2], new MathContext(instance.getNbDecimals())));
-				// if (Maths.floor(energy, precision) < 0) {
 				if (energyD.doubleValue() + Math.pow(10, -precision) < 0) {
 	
 					if (output) {
@@ -182,8 +179,6 @@ public class Cons_routeCharge {
 				}
 				energyD = energyD
 						.add(new BigDecimal(route.getChargingAmount(i + 1), new MathContext(instance.getNbDecimals())));
-				// if (Maths.floor(energy, precision) >
-				// instance.getBatteryCapacity()) {
 				if (energyD.doubleValue() - Math.pow(10, -precision) > instance.getBatteryCapacity()) {
 					if (output) {
 						pw.println(
