@@ -29,7 +29,7 @@ public class ManagerView {
 	
 	public void printMenu() {
 		
-		System.out.println("-------------------------Solition checker E-VRP-----------------------------");
+		System.out.println("-------------------------Solution checker E-VRP-----------------------------");
 		System.out.println("Welcome, select one of the following options:");
 		System.out.println("\t 1. Use the set of instances from Montoya et al. (2017)");
 		System.out.println("\t 2. Use the set of instances from Froger et al. (2021)");
